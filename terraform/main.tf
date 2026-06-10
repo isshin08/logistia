@@ -53,7 +53,7 @@ resource "proxmox_virtual_environment_vm" "vms" {
   node_name = var.proxmox_node
   vm_id     = each.value.vmid
   name      = each.key
- #kvm       = false
+  #kvm       = false
 
   clone {
     vm_id = 9000
