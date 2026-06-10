@@ -1,0 +1,114 @@
+---
+- name: Configuration runner-server GitHub Actions
+  hosts: runners
+  become: true
+
+  vars:
+    runner_user: github-runner
+    runner_dir: /opt/github-runner
+
+  tasks:
+
+    - name: Creer utilisateur github-runner
+      user:
+        name: "{{ runner_user }}"
+        shell: /bin/bash
+        system: no
+        create_home: yes
+
+    - name: Creer dossier runner
+      file:
+        path: "{{ runner_dir }}"
+        state: directory
+        owner: "{{ runner_user }}"
+        group: "{{ runner_user }}"
+        mode: '0755'
+
+    - name: Installer dependances
+      apt:
+        name:
+          - curl
+          - git
+          - jq
+          - docker.io
+        state: present
+        update_cache: yes
+
+    - name: Ajouter github-runner au groupe docker
+      user:
+        name: "{{ runner_user }}"
+        groups: docker
+        append: yes
+
+    - name: Demarrer Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Telecharger GitHub Actions Runner
+      get_url:
+        url: "https://github.com/actions/runner/releases/download/v2.317.0/actions-runner-linux-x64-2.317.0.tar.gz"
+        dest: /tmp/actions-runner.tar.gz
+        owner: "{{ runner_user }}"
+
+    - name: Extraire runner
+      unarchive:
+        src: /tmp/actions-runner.tar.gz
+        dest: "{{ runner_dir }}"
+        remote_src: yes
+        owner: "{{ runner_user }}"
+        group: "{{ runner_user }}"
+
+    - name: Creer script de configuration du runner
+      copy:
+        dest: "{{ runner_dir }}/setup-runner.sh"
+        owner: "{{ runner_user }}"
+        mode: '0755'
+        content: |
+          #!/bin/bash
+          # Lancer ce script manuellement avec ton token GitHub
+          # Usage : ./setup-runner.sh <GITHUB_REPO_URL> <TOKEN>
+          #
+          # Exemple :
+          # ./setup-runner.sh https://github.com/tonuser/projet-isrc XXXXXXXX
+          
+          REPO_URL=$1
+          TOKEN=$2
+
+          if [ -z "$REPO_URL" ] || [ -z "$TOKEN" ]; then
+            echo "Usage: $0 <repo_url> <token>"
+            exit 1
+          fi
+
+          cd /opt/github-runner
+          ./config.sh \
+            --url "$REPO_URL" \
+            --token "$TOKEN" \
+            --name "isrc-runner" \
+            --labels "self-hosted,linux,proxmox" \
+            --unattended
+
+    - name: Creer service systemd runner
+      copy:
+        dest: /etc/systemd/system/github-runner.service
+        content: |
+          [Unit]
+          Description=GitHub Actions Runner
+          After=network.target
+
+          [Service]
+          User={{ runner_user }}
+          WorkingDirectory={{ runner_dir }}
+          ExecStart={{ runner_dir }}/run.sh
+          Restart=always
+          RestartSec=10
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Activer service runner
+      systemd:
+        name: github-runner
+        enabled: yes
+        daemon_reload: yes

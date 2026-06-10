@@ -1,0 +1,112 @@
+---
+- name: Installation Wazuh Manager sur soc-server
+  hosts: soc
+  become: true
+
+  tasks:
+
+    - name: Installer dependances Wazuh
+      apt:
+        name:
+          - curl
+          - apt-transport-https
+          - gnupg
+        state: present
+        update_cache: yes
+
+    - name: Importer cle GPG Wazuh
+      shell: |
+        curl -fsSL https://packages.wazuh.com/key/GPG-KEY-WAZUH | \
+        gpg --dearmor -o /etc/apt/keyrings/wazuh.gpg
+      args:
+        creates: /etc/apt/keyrings/wazuh.gpg
+
+    - name: Ajouter depot Wazuh
+      copy:
+        dest: /etc/apt/sources.list.d/wazuh.list
+        content: |
+          deb [signed-by=/etc/apt/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main
+
+    - name: Installer Wazuh Manager
+      apt:
+        name: wazuh-manager
+        state: present
+        update_cache: yes
+
+    - name: Demarrer Wazuh Manager
+      systemd:
+        name: wazuh-manager
+        enabled: yes
+        state: started
+
+    - name: Installer Filebeat pour Wazuh
+      apt:
+        name: filebeat
+        state: present
+        update_cache: yes
+
+    - name: Configurer Filebeat pour Wazuh
+      copy:
+        dest: /etc/filebeat/filebeat.yml
+        content: |
+          output.elasticsearch:
+            hosts: ['127.0.0.1:9200']
+            protocol: https
+            username: admin
+            password: admin
+            ssl.certificate_authorities:
+              - /etc/elasticsearch/certs/root-ca.pem
+            ssl.certificate: /etc/filebeat/certs/filebeat.pem
+            ssl.key: /etc/filebeat/certs/filebeat-key.pem
+
+          filebeat.modules:
+            - module: wazuh
+              alerts:
+                enabled: true
+              archives:
+                enabled: false
+
+    - name: Demarrer Filebeat
+      systemd:
+        name: filebeat
+        enabled: yes
+        state: started
+
+- name: Installer Wazuh Agent sur toutes les VM
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: Importer cle GPG Wazuh
+      shell: |
+        curl -fsSL https://packages.wazuh.com/key/GPG-KEY-WAZUH | \
+        gpg --dearmor -o /etc/apt/keyrings/wazuh.gpg
+      args:
+        creates: /etc/apt/keyrings/wazuh.gpg
+
+    - name: Ajouter depot Wazuh
+      copy:
+        dest: /etc/apt/sources.list.d/wazuh.list
+        content: |
+          deb [signed-by=/etc/apt/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main
+
+    - name: Installer Wazuh Agent
+      apt:
+        name: wazuh-agent
+        state: present
+        update_cache: yes
+      environment:
+        WAZUH_MANAGER: "192.168.30.10"
+
+    - name: Configurer adresse du manager Wazuh
+      lineinfile:
+        path: /var/ossec/etc/ossec.conf
+        regexp: '<address>.*</address>'
+        line: '    <address>192.168.30.10</address>'
+
+    - name: Demarrer Wazuh Agent
+      systemd:
+        name: wazuh-agent
+        enabled: yes
+        state: started

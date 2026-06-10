@@ -1,0 +1,155 @@
+---
+- name: Configuration web-server Nginx + Flask
+  hosts: webservers
+  become: true
+
+  vars:
+    app_dir: /opt/logistia
+    db_host: 192.168.20.10
+    db_name: logistia
+    db_user: logistia
+    db_password: Logistia2026!
+
+  tasks:
+
+    - name: Installer Nginx + Python
+      apt:
+        name:
+          - nginx
+          - python3
+          - python3-pip
+          - python3-venv
+        state: present
+        update_cache: yes
+
+    - name: Creer dossier application
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+
+    - name: Creer environnement virtuel Python
+      command: python3 -m venv {{ app_dir }}/venv
+      args:
+        creates: "{{ app_dir }}/venv"
+
+    - name: Installer dependances Python
+      pip:
+        name:
+          - flask
+          - psycopg2-binary
+          - gunicorn
+        virtualenv: "{{ app_dir }}/venv"
+
+    - name: Creer application Flask
+      copy:
+        dest: "{{ app_dir }}/app.py"
+        content: |
+          from flask import Flask, request, jsonify
+          import logging
+          import random
+          import time
+
+          app = Flask(__name__)
+
+          logging.basicConfig(
+              filename='/var/log/logistia/app.log',
+              level=logging.INFO,
+              format='%(asctime)s %(levelname)s %(message)s'
+          )
+
+          @app.route('/')
+          def index():
+              app.logger.info(f"GET / from {request.remote_addr}")
+              return jsonify({"status": "ok", "service": "logistia"})
+
+          @app.route('/api/stock')
+          def stock():
+              app.logger.info(f"GET /api/stock from {request.remote_addr}")
+              return jsonify({"items": random.randint(100, 500)})
+
+          @app.route('/api/livraison', methods=['POST'])
+          def livraison():
+              data = request.json or {}
+              app.logger.info(f"POST /api/livraison from {request.remote_addr} data={data}")
+              return jsonify({"status": "enregistre", "id": random.randint(1000, 9999)})
+
+          @app.route('/api/anomalie')
+          def anomalie():
+              for i in range(20):
+                  app.logger.warning(f"ANOMALIE acces suspect depuis {request.remote_addr} tentative={i}")
+              return jsonify({"status": "anomalie simulee"})
+
+          if __name__ == '__main__':
+              app.run(host='0.0.0.0', port=5000)
+
+    - name: Creer dossier logs
+      file:
+        path: /var/log/logistia
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+
+    - name: Creer service systemd pour Flask
+      copy:
+        dest: /etc/systemd/system/logistia.service
+        content: |
+          [Unit]
+          Description=Logistia Flask App
+          After=network.target
+
+          [Service]
+          User=www-data
+          WorkingDirectory={{ app_dir }}
+          ExecStart={{ app_dir }}/venv/bin/gunicorn -w 2 -b 127.0.0.1:5000 app:app
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Activer et demarrer Flask
+      systemd:
+        name: logistia
+        enabled: yes
+        state: started
+        daemon_reload: yes
+
+    - name: Configurer Nginx comme reverse proxy
+      copy:
+        dest: /etc/nginx/sites-available/logistia
+        content: |
+          server {
+              listen 80;
+              server_name _;
+
+              access_log /var/log/nginx/logistia_access.log;
+              error_log  /var/log/nginx/logistia_error.log;
+
+              location / {
+                  proxy_pass http://127.0.0.1:5000;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+              }
+          }
+
+    - name: Activer le site Nginx
+      file:
+        src: /etc/nginx/sites-available/logistia
+        dest: /etc/nginx/sites-enabled/logistia
+        state: link
+      notify: restart nginx
+
+    - name: Desactiver site par defaut Nginx
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: restart nginx
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted

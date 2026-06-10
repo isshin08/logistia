@@ -1,0 +1,176 @@
+---
+- name: Configuration ia-server - Isolation Forest
+  hosts: ia
+  become: true
+
+  tasks:
+
+    - name: Installer dependances Python
+      apt:
+        name:
+          - python3
+          - python3-pip
+          - python3-venv
+        state: present
+        update_cache: yes
+
+    - name: Creer dossier application IA
+      file:
+        path: /opt/ia-logistia
+        state: directory
+        mode: '0755'
+
+    - name: Creer environnement virtuel Python
+      command: python3 -m venv /opt/ia-logistia/venv
+      args:
+        creates: /opt/ia-logistia/venv
+
+    - name: Installer bibliotheques IA
+      pip:
+        name:
+          - scikit-learn
+          - pandas
+          - numpy
+          - requests
+        virtualenv: /opt/ia-logistia/venv
+
+    - name: Creer script de detection d anomalies
+      copy:
+        dest: /opt/ia-logistia/detect.py
+        mode: '0755'
+        content: |
+          #!/opt/ia-logistia/venv/bin/python3
+          """
+          Detecteur d'anomalies - Isolation Forest
+          Projet ISRC - Plateforme cybersecurite LOGISTIA
+          """
+          import pandas as pd
+          import numpy as np
+          from sklearn.ensemble import IsolationForest
+          from datetime import datetime
+          import json
+          import re
+          import os
+
+          LOG_FILE = "/var/log/ia-logistia/analyse.log"
+          REPORT_FILE = "/var/log/ia-logistia/anomalies.json"
+
+          os.makedirs("/var/log/ia-logistia", exist_ok=True)
+
+          def log(msg):
+              ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+              with open(LOG_FILE, "a") as f:
+                  f.write(f"{ts} {msg}\n")
+              print(f"{ts} {msg}")
+
+          def generer_donnees_simulees():
+              """
+              Simule des metriques reseau/systeme normales
+              avec quelques anomalies injectees
+              """
+              np.random.seed(42)
+              n_normal = 200
+              n_anomalie = 20
+
+              normal = pd.DataFrame({
+                  "nb_requetes":     np.random.randint(1, 50, n_normal),
+                  "nb_erreurs":      np.random.randint(0, 5, n_normal),
+                  "tentatives_ssh":  np.random.randint(0, 3, n_normal),
+                  "volume_octets":   np.random.randint(100, 5000, n_normal),
+                  "duree_session":   np.random.randint(1, 120, n_normal),
+              })
+
+              anomalies = pd.DataFrame({
+                  "nb_requetes":     np.random.randint(500, 1000, n_anomalie),
+                  "nb_erreurs":      np.random.randint(50, 200, n_anomalie),
+                  "tentatives_ssh":  np.random.randint(20, 100, n_anomalie),
+                  "volume_octets":   np.random.randint(50000, 200000, n_anomalie),
+                  "duree_session":   np.random.randint(0, 1, n_anomalie),
+              })
+
+              return pd.concat([normal, anomalies], ignore_index=True)
+
+          def analyser():
+              log("Demarrage analyse Isolation Forest")
+
+              df = generer_donnees_simulees()
+              log(f"Dataset charge : {len(df)} entrees")
+
+              model = IsolationForest(
+                  contamination=0.08,
+                  random_state=42,
+                  n_estimators=100
+              )
+
+              features = ["nb_requetes", "nb_erreurs", "tentatives_ssh",
+                          "volume_octets", "duree_session"]
+
+              df["score"] = model.fit_predict(df[features])
+              df["anomalie"] = df["score"] == -1
+
+              anomalies = df[df["anomalie"] == True]
+              log(f"Anomalies detectees : {len(anomalies)}/{len(df)}")
+
+              rapport = {
+                  "timestamp": datetime.now().isoformat(),
+                  "total_entrees": len(df),
+                  "anomalies_detectees": len(anomalies),
+                  "taux_anomalie": round(len(anomalies) / len(df) * 100, 2),
+                  "anomalies": anomalies[features].to_dict(orient="records")
+              }
+
+              with open(REPORT_FILE, "w") as f:
+                  json.dump(rapport, f, indent=2)
+
+              log(f"Rapport sauvegarde : {REPORT_FILE}")
+              log(f"Taux anomalie : {rapport['taux_anomalie']}%")
+              return rapport
+
+          if __name__ == "__main__":
+              analyser()
+
+    - name: Creer dossier logs IA
+      file:
+        path: /var/log/ia-logistia
+        state: directory
+        mode: '0755'
+
+    - name: Creer service systemd IA
+      copy:
+        dest: /etc/systemd/system/ia-logistia.service
+        content: |
+          [Unit]
+          Description=IA Logistia - Isolation Forest
+          After=network.target
+
+          [Service]
+          ExecStart=/opt/ia-logistia/venv/bin/python3 /opt/ia-logistia/detect.py
+          User=root
+          Restart=no
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Creer timer systemd pour execution periodique
+      copy:
+        dest: /etc/systemd/system/ia-logistia.timer
+        content: |
+          [Unit]
+          Description=Lancer analyse IA toutes les 5 minutes
+
+          [Timer]
+          OnBootSec=60
+          OnUnitActiveSec=5min
+
+          [Install]
+          WantedBy=timers.target
+
+    - name: Activer le timer IA
+      systemd:
+        name: ia-logistia.timer
+        enabled: yes
+        state: started
+        daemon_reload: yes
+
+    - name: Lancer une premiere analyse immediatement
+      command: /opt/ia-logistia/venv/bin/python3 /opt/ia-logistia/detect.py

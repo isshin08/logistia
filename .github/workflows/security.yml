@@ -1,0 +1,73 @@
+name: Security - Scan
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  scan-secrets:
+    name: Scan secrets dans le code
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Installer truffleHog
+        run: pip3 install truffleHog --break-system-packages || true
+
+      - name: Scanner secrets
+        run: |
+          trufflehog filesystem . \
+            --exclude-paths=.git \
+            --json 2>/dev/null | head -50 || echo "Scan termine"
+
+  scan-ansible:
+    name: Audit securite Ansible
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verifier permissions fichiers sensibles
+        run: |
+          echo "=== Verification fichiers sensibles ==="
+          find . -name "*.tfvars" | while read f; do
+            echo "⚠️  tfvars trouve : $f"
+          done
+          find . -name "id_rsa" -o -name "id_ed25519" | while read f; do
+            echo "⚠️  Cle SSH trouvee : $f"
+          done
+
+  check-services:
+    name: Verification services actifs
+    runs-on: self-hosted
+
+    steps:
+      - name: Verifier services sur toutes les VM
+        run: |
+          echo "=== db-server ==="
+          ssh -o StrictHostKeyChecking=no \
+              -i ~/.ssh/id_ed25519 \
+              debian@192.168.20.10 \
+              "sudo systemctl is-active postgresql"
+
+          echo "=== web-server ==="
+          ssh -o StrictHostKeyChecking=no \
+              -i ~/.ssh/id_ed25519 \
+              debian@192.168.20.20 \
+              "sudo systemctl is-active nginx logistia"
+
+          echo "=== soc-server ==="
+          ssh -o StrictHostKeyChecking=no \
+              -i ~/.ssh/id_ed25519 \
+              debian@192.168.30.10 \
+              "sudo systemctl is-active prometheus grafana-server wazuh-manager"
+
+          echo "=== ia-server ==="
+          ssh -o StrictHostKeyChecking=no \
+              -i ~/.ssh/id_ed25519 \
+              debian@192.168.20.30 \
+              "sudo systemctl is-active ia-logistia.timer"

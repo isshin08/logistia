@@ -1,0 +1,54 @@
+name: Deploy - Infrastructure
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'terraform/**'
+      - 'ansible/**'
+
+jobs:
+  terraform:
+    name: Terraform Apply
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Terraform init
+        working-directory: terraform
+        run: terraform init
+
+      - name: Terraform plan
+        working-directory: terraform
+        run: terraform plan -parallelism=1
+
+  ansible:
+    name: Ansible Deploy
+    runs-on: self-hosted
+    needs: terraform
+
+    env:
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Ping toutes les VM
+        working-directory: ansible
+        run: ansible all -m ping
+
+      - name: Deployer configuration commune
+        working-directory: ansible
+        run: ansible-playbook playbooks/common.yml --forks=1
+
+      - name: Deployer application web
+        working-directory: ansible
+        run: ansible-playbook playbooks/web.yml --forks=1
+
+      - name: Deployer base de donnees
+        working-directory: ansible
+        run: ansible-playbook playbooks/db.yml --forks=1

@@ -1,0 +1,79 @@
+---
+- name: Configuration db-server PostgreSQL
+  hosts: databases
+  become: true
+
+  vars:
+    db_name: logistia
+    db_user: logistia
+    db_password: "{{ lookup('env', 'DB_PASSWORD') | default('changeme') }}"
+
+  tasks:
+
+    - name: Installer PostgreSQL
+      apt:
+        name:
+          - postgresql
+          - postgresql-contrib
+          - python3-psycopg2
+        state: present
+        update_cache: yes
+
+    - name: Demarrer et activer PostgreSQL
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+
+    - name: Creer la base de donnees
+      shell: |
+        su - postgres -c "psql -tc \"SELECT 1 FROM pg_database WHERE datname='{{ db_name }}'\"" | grep -q 1 \
+        || su - postgres -c "psql -c \"CREATE DATABASE {{ db_name }};\""
+      args:
+        executable: /bin/bash
+
+    - name: Creer utilisateur PostgreSQL
+      shell: |
+        su - postgres -c "psql -tc \"SELECT 1 FROM pg_roles WHERE rolname='{{ db_user }}'\"" | grep -q 1 \
+        || su - postgres -c "psql -c \"CREATE USER {{ db_user }} WITH PASSWORD '{{ db_password }}';\""
+      args:
+        executable: /bin/bash
+
+    - name: Attribuer droits sur la base
+      shell: |
+        su - postgres -c "psql -c \"GRANT ALL PRIVILEGES ON DATABASE {{ db_name }} TO {{ db_user }};\""
+      args:
+        executable: /bin/bash
+
+    - name: Creer table app_logs
+      shell: |
+        su - postgres -c "psql -d {{ db_name }} -c \"
+        CREATE TABLE IF NOT EXISTS app_logs (
+          id SERIAL PRIMARY KEY,
+          timestamp TIMESTAMP DEFAULT NOW(),
+          level VARCHAR(10),
+          source VARCHAR(50),
+          message TEXT
+        );\""
+      args:
+        executable: /bin/bash
+
+    - name: Autoriser connexions depuis VLAN 20
+      lineinfile:
+        path: /etc/postgresql/15/main/pg_hba.conf
+        line: "host {{ db_name }} {{ db_user }} 192.168.20.0/24 md5"
+        state: present
+      notify: restart postgresql
+
+    - name: Ecouter sur toutes les interfaces
+      lineinfile:
+        path: /etc/postgresql/15/main/postgresql.conf
+        regexp: "^#?listen_addresses"
+        line: "listen_addresses = '*'"
+      notify: restart postgresql
+
+  handlers:
+    - name: restart postgresql
+      service:
+        name: postgresql
+        state: restarted

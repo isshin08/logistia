@@ -1,0 +1,19 @@
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+terraform.tfvars
+
+# Clés SSH
+*.pem
+id_rsa
+id_ed25519
+
+# Tokens et secrets
+*.env
+.env
+token
+
+# Logs
+*.log
