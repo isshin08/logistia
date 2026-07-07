@@ -73,7 +73,7 @@
         state: started
 
 - name: Installer Wazuh Agent sur toutes les VM
-  hosts: all
+  hosts: all:!soc
   become: true
 
   tasks:
