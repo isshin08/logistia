@@ -1,0 +1,28 @@
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-06-11 21:23 CEST
+Nmap scan report for vm100 (192.168.20.10)
+Host is up (0.0076s latency).
+Not shown: 996 closed tcp ports (reset)
+PORT     STATE SERVICE    VERSION
+22/tcp   open  ssh        OpenSSH 9.2p1 Debian 2+deb12u10 (protocol 2.0)
+| ssh-hostkey: 
+|   256 dc:bc:17:67:77:e1:a0:d1:3f:43:13:e3:b3:f6:f7:57 (ECDSA)
+|_  256 7b:d4:9a:8b:a2:01:a8:7c:d8:86:4d:ff:3d:d9:5b:1d (ED25519)
+5432/tcp open  postgresql PostgreSQL DB 9.6.0 or later
+| ssl-cert: Subject: commonName=db-server
+| Subject Alternative Name: DNS:db-server
+| Not valid before: 2026-06-09T14:36:31
+|_Not valid after:  2036-06-06T14:36:31
+|_ssl-date: TLS randomness does not represent time
+9080/tcp open  http       Golang net/http server (Go-IPFS json-rpc or InfluxDB API)
+| http-title: Targets
+|_Requested resource was /targets
+9100/tcp open  jetdirect?
+Device type: general purpose|router
+Running: Linux 4.X|5.X, MikroTik RouterOS 7.X
+OS CPE: cpe:/o:linux:linux_kernel:4 cpe:/o:linux:linux_kernel:5 cpe:/o:mikrotik:routeros:7 cpe:/o:linux:linux_kernel:5.6.3
+OS details: Linux 4.15 - 5.19, OpenWrt 21.02 (Linux 5.4), MikroTik RouterOS 7.2 - 7.5 (Linux 5.6.3)
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 27.59 seconds

@@ -1,0 +1,134 @@
+{
+  "timestamp": "2026-07-07T13:50:50.465266",
+  "total_entrees": 220,
+  "anomalies_detectees": 18,
+  "taux_anomalie": 8.18,
+  "anomalies": [
+    {
+      "nb_requetes": 637,
+      "nb_erreurs": 98,
+      "tentatives_ssh": 79,
+      "volume_octets": 199646,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 671,
+      "nb_erreurs": 118,
+      "tentatives_ssh": 49,
+      "volume_octets": 190256,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 512,
+      "nb_erreurs": 127,
+      "tentatives_ssh": 56,
+      "volume_octets": 61246,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 667,
+      "nb_erreurs": 166,
+      "tentatives_ssh": 24,
+      "volume_octets": 199453,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 629,
+      "nb_erreurs": 169,
+      "tentatives_ssh": 97,
+      "volume_octets": 177796,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 583,
+      "nb_erreurs": 186,
+      "tentatives_ssh": 45,
+      "volume_octets": 142263,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 820,
+      "nb_erreurs": 125,
+      "tentatives_ssh": 81,
+      "volume_octets": 185090,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 818,
+      "nb_erreurs": 84,
+      "tentatives_ssh": 23,
+      "volume_octets": 61302,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 600,
+      "nb_erreurs": 50,
+      "tentatives_ssh": 61,
+      "volume_octets": 117506,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 828,
+      "nb_erreurs": 89,
+      "tentatives_ssh": 37,
+      "volume_octets": 91157,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 764,
+      "nb_erreurs": 199,
+      "tentatives_ssh": 91,
+      "volume_octets": 146646,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 958,
+      "nb_erreurs": 109,
+      "tentatives_ssh": 58,
+      "volume_octets": 133122,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 898,
+      "nb_erreurs": 113,
+      "tentatives_ssh": 33,
+      "volume_octets": 74519,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 907,
+      "nb_erreurs": 142,
+      "tentatives_ssh": 51,
+      "volume_octets": 130910,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 537,
+      "nb_erreurs": 121,
+      "tentatives_ssh": 70,
+      "volume_octets": 170430,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 918,
+      "nb_erreurs": 60,
+      "tentatives_ssh": 57,
+      "volume_octets": 121324,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 593,
+      "nb_erreurs": 154,
+      "tentatives_ssh": 42,
+      "volume_octets": 55408,
+      "duree_session": 0
+    },
+    {
+      "nb_requetes": 594,
+      "nb_erreurs": 63,
+      "tentatives_ssh": 82,
+      "volume_octets": 109379,
+      "duree_session": 0
+    }
+  ]
+}

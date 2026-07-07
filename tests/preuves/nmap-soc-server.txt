@@ -1,0 +1,31 @@
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-06-11 21:24 CEST
+Nmap scan report for vm102 (192.168.30.10)
+Host is up (0.0065s latency).
+Not shown: 995 closed tcp ports (reset)
+PORT     STATE SERVICE    VERSION
+22/tcp   open  ssh        OpenSSH 9.2p1 Debian 2+deb12u10 (protocol 2.0)
+| ssh-hostkey: 
+|   256 3e:02:24:89:fe:e4:3f:59:56:1e:79:8b:9f:08:8d:76 (ECDSA)
+|_  256 75:aa:2b:ec:82:b0:21:cc:02:88:b3:a2:d0:78:93:18 (ED25519)
+3000/tcp open  http       Grafana http
+| http-title: Grafana
+|_Requested resource was /login
+|_http-trane-info: Problem with XML parsing of /evox/about
+| http-robots.txt: 1 disallowed entry 
+|_/
+9080/tcp open  http       Golang net/http server (Go-IPFS json-rpc or InfluxDB API)
+| http-title: Targets
+|_Requested resource was /targets
+9090/tcp open  http       Golang net/http server (Go-IPFS json-rpc or InfluxDB API)
+| http-title: Prometheus Time Series Collection and Processing Server
+|_Requested resource was /graph
+9100/tcp open  jetdirect?
+Device type: general purpose
+Running: Linux 4.X|5.X
+OS CPE: cpe:/o:linux:linux_kernel:4 cpe:/o:linux:linux_kernel:5
+OS details: Linux 4.15 - 5.19
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 68.66 seconds

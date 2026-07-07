@@ -1,0 +1,25 @@
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-06-11 21:23 CEST
+Nmap scan report for vm103 (192.168.20.20)
+Host is up (0.0032s latency).
+Not shown: 996 closed tcp ports (reset)
+PORT     STATE SERVICE    VERSION
+22/tcp   open  ssh        OpenSSH 9.2p1 Debian 2+deb12u10 (protocol 2.0)
+| ssh-hostkey: 
+|   256 73:89:d0:fd:7d:9e:05:99:ee:e4:46:0c:41:49:fd:c3 (ECDSA)
+|_  256 1c:68:44:b6:f1:ae:5c:09:37:ed:dc:7d:3e:a4:ae:01 (ED25519)
+80/tcp   open  http       nginx 1.22.1
+|_http-server-header: nginx/1.22.1
+|_http-title: Site doesn't have a title (application/json).
+9080/tcp open  http       Golang net/http server (Go-IPFS json-rpc or InfluxDB API)
+| http-title: Targets
+|_Requested resource was /targets
+9100/tcp open  jetdirect?
+Device type: general purpose|router
+Running: Linux 4.X|5.X, MikroTik RouterOS 7.X
+OS CPE: cpe:/o:linux:linux_kernel:4 cpe:/o:linux:linux_kernel:5 cpe:/o:mikrotik:routeros:7 cpe:/o:linux:linux_kernel:5.6.3
+OS details: Linux 4.15 - 5.19, OpenWrt 21.02 (Linux 5.4), MikroTik RouterOS 7.2 - 7.5 (Linux 5.6.3)
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 26.51 seconds

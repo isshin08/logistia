@@ -1,0 +1,14 @@
+Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2026-07-07 13:43:45
+[DATA] max 4 tasks per 1 server, overall 4 tasks, 7 login tries (l:1/p:7), ~2 tries per task
+[DATA] attacking ssh://192.168.20.20:22/
+[ATTEMPT] target 192.168.20.20 - login "root" - pass "admin" - 1 of 7 [child 0] (0/0)
+[ATTEMPT] target 192.168.20.20 - login "root" - pass "password" - 2 of 7 [child 1] (0/0)
+[ATTEMPT] target 192.168.20.20 - login "root" - pass "123456" - 3 of 7 [child 2] (0/0)
+[ATTEMPT] target 192.168.20.20 - login "root" - pass "root" - 4 of 7 [child 3] (0/0)
+[ATTEMPT] target 192.168.20.20 - login "root" - pass "debian" - 5 of 7 [child 0] (0/0)
+[ATTEMPT] target 192.168.20.20 - login "root" - pass "logistia" - 6 of 7 [child 1] (0/0)
+[ATTEMPT] target 192.168.20.20 - login "root" - pass "test" - 7 of 7 [child 2] (0/0)
+1 of 1 target completed, 0 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2026-07-07 13:43:53

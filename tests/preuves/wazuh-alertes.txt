@@ -1,0 +1,147 @@
+=== ALERTES BRUTE FORCE SSH ===
+Rule: 5760 (level 5) -> 'sshd: authentication failed.'
+Src IP: 192.168.1.150
+Src Port: 34262
+User: root
+Jul 07 09:05:50 web-server sshd[1314]: Failed password for root from 192.168.1.150 port 34262 ssh2
+
+** Alert 1783415150.17423: - syslog,sshd,authentication_failed,gdpr_IV_35.7.d,gdpr_IV_32.2,gpg13_7.1,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,pci_dss_10.2.4,pci_dss_10.2.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:50 (web-server) any->journald
+Rule: 5760 (level 5) -> 'sshd: authentication failed.'
+Src IP: 192.168.1.150
+Src Port: 34248
+User: root
+Jul 07 09:05:50 web-server sshd[1313]: Failed password for root from 192.168.1.150 port 34248 ssh2
+
+** Alert 1783415150.17898: - syslog,sshd,authentication_failed,gdpr_IV_35.7.d,gdpr_IV_32.2,gpg13_7.1,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,pci_dss_10.2.4,pci_dss_10.2.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:50 (web-server) any->journald
+Rule: 5760 (level 5) -> 'sshd: authentication failed.'
+Src IP: 192.168.1.150
+Src Port: 34232
+User: root
+Jul 07 09:05:50 web-server sshd[1312]: Failed password for root from 192.168.1.150 port 34232 ssh2
+
+** Alert 1783415150.18373: - syslog,sshd,authentication_failed,gdpr_IV_35.7.d,gdpr_IV_32.2,gpg13_7.1,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,pci_dss_10.2.4,pci_dss_10.2.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:50 (web-server) any->journald
+Rule: 5760 (level 5) -> 'sshd: authentication failed.'
+Src IP: 192.168.1.150
+Src Port: 34228
+User: root
+Jul 07 09:05:50 web-server sshd[1311]: Failed password for root from 192.168.1.150 port 34228 ssh2
+
+** Alert 1783415154.18848: - syslog,sshd,authentication_failed,gdpr_IV_35.7.d,gdpr_IV_32.2,gpg13_7.1,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,pci_dss_10.2.4,pci_dss_10.2.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:54 (web-server) any->journald
+Rule: 5760 (level 5) -> 'sshd: authentication failed.'
+Src IP: 192.168.1.150
+Src Port: 34262
+User: root
+Jul 07 09:05:53 web-server sshd[1314]: Failed password for root from 192.168.1.150 port 34262 ssh2
+
+** Alert 1783415154.19323: - syslog,sshd,authentication_failed,gdpr_IV_35.7.d,gdpr_IV_32.2,gpg13_7.1,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,pci_dss_10.2.4,pci_dss_10.2.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:54 (web-server) any->journald
+Rule: 5760 (level 5) -> 'sshd: authentication failed.'
+Src IP: 192.168.1.150
+Src Port: 34248
+User: root
+Jul 07 09:05:53 web-server sshd[1313]: Failed password for root from 192.168.1.150 port 34248 ssh2
+
+** Alert 1783415154.19798: - syslog,sshd,authentication_failed,gdpr_IV_35.7.d,gdpr_IV_32.2,gpg13_7.1,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,pci_dss_10.2.4,pci_dss_10.2.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:54 (web-server) any->journald
+Rule: 5760 (level 5) -> 'sshd: authentication failed.'
+Src IP: 192.168.1.150
+Src Port: 34228
+User: root
+Jul 07 09:05:53 web-server sshd[1311]: Failed password for root from 192.168.1.150 port 34228 ssh2
+
+** Alert 1783416573.20273: - syslog,sshd,authentication_success,gdpr_IV_32.2,gpg13_7.1,gpg13_7.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,pci_dss_10.2.5,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:29:33 soc-server->journald
+Rule: 5715 (level 3) -> 'sshd: authentication success.'
+Src IP: 192.168.1.150
+Src Port: 59062
+--
+
+=== ALERTES UTILISATEUR INEXISTANT ===
+
+=== ALERTES AUTHENTIFICATION ECHOUEE NIVEAU 5+ ===
+Jul 07 09:05:48 web-server sshd[1314]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.1.150  user=root
+uid: 0
+euid: 0
+tty: ssh
+
+** Alert 1783415150.15358: - pam,syslog,authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,gpg13_7.8,gdpr_IV_35.7.d,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:50 (web-server) any->journald
+Rule: 5503 (level 5) -> 'PAM: User login failed.'
+Src IP: 192.168.1.150
+User: root
+Jul 07 09:05:48 web-server sshd[1313]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.1.150  user=root
+uid: 0
+euid: 0
+tty: ssh
+
+** Alert 1783415150.15888: - pam,syslog,authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,gpg13_7.8,gdpr_IV_35.7.d,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:50 (web-server) any->journald
+Rule: 5503 (level 5) -> 'PAM: User login failed.'
+Src IP: 192.168.1.150
+User: root
+Jul 07 09:05:48 web-server sshd[1312]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.1.150  user=root
+uid: 0
+euid: 0
+tty: ssh
+
+** Alert 1783415150.16418: - pam,syslog,authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,gpg13_7.8,gdpr_IV_35.7.d,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:50 (web-server) any->journald
+Rule: 5503 (level 5) -> 'PAM: User login failed.'
+Src IP: 192.168.1.150
+User: root
+Jul 07 09:05:48 web-server sshd[1311]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.1.150  user=root
+uid: 0
+euid: 0
+tty: ssh
+
+** Alert 1783415150.16948: - syslog,sshd,authentication_failed,gdpr_IV_35.7.d,gdpr_IV_32.2,gpg13_7.1,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,pci_dss_10.2.4,pci_dss_10.2.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:50 (web-server) any->journald
+Rule: 5760 (level 5) -> 'sshd: authentication failed.'
+Src IP: 192.168.1.150
+Src Port: 34262
+User: root
+Jul 07 09:05:50 web-server sshd[1314]: Failed password for root from 192.168.1.150 port 34262 ssh2
+
+** Alert 1783415150.17423: - syslog,sshd,authentication_failed,gdpr_IV_35.7.d,gdpr_IV_32.2,gpg13_7.1,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,pci_dss_10.2.4,pci_dss_10.2.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:50 (web-server) any->journald
+Rule: 5760 (level 5) -> 'sshd: authentication failed.'
+Src IP: 192.168.1.150
+Src Port: 34248
+User: root
+Jul 07 09:05:50 web-server sshd[1313]: Failed password for root from 192.168.1.150 port 34248 ssh2
+
+** Alert 1783415150.17898: - syslog,sshd,authentication_failed,gdpr_IV_35.7.d,gdpr_IV_32.2,gpg13_7.1,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,pci_dss_10.2.4,pci_dss_10.2.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Jul 07 09:05:50 (web-server) any->journald
+Rule: 5760 (level 5) -> 'sshd: authentication failed.'
+Src IP: 192.168.1.150
+Src Port: 34232
+User: root
+Jul 07 09:05:50 web-server sshd[1312]: Failed password for root from 192.168.1.150 port 34232 ssh2
+
+** Alert 1783415150.18373: - syslog,sshd,authentication_failed,gdpr_IV_35.7.d,gdpr_IV_32.2,gpg13_7.1,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,pci_dss_10.2.4,pci_dss_10.2.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+
+=== RESUME DES REGLES DECLENCHEES ===
+     46 Rule: 5501 (level 3) -> 'PAM: Login session opened.'
+     43 Rule: 2904 (level 7) -> 'Dpkg (Debian Package) half configured.'
+     29 Rule: 5502 (level 3) -> 'PAM: Login session closed.'
+     29 Rule: 2902 (level 7) -> 'New dpkg (Debian Package) installed.'
+     16 Rule: 5760 (level 5) -> 'sshd: authentication failed.'
+     16 Rule: 5715 (level 3) -> 'sshd: authentication success.'
+     15 Rule: 5503 (level 5) -> 'PAM: User login failed.'
+     12 Rule: 5402 (level 3) -> 'Successful sudo to ROOT executed.'
+      9 Rule: 2501 (level 5) -> 'syslog: User authentication failure.'
+      6 Rule: 533 (level 7) -> 'Listened ports status (netstat) changed (new port opened or closed).'
+      6 Rule: 2901 (level 3) -> 'New dpkg (Debian Package) requested to install.'
+      4 Rule: 503 (level 3) -> 'Wazuh agent started.'
+      2 Rule: 5403 (level 4) -> 'First time user executed sudo.'
+      2 Rule: 506 (level 3) -> 'Wazuh agent stopped.'
+      1 command: /usr/bin/grep -A8 'Rule: 57' /var/ossec/logs/alerts/alerts.log
+      1 Rule: 502 (level 3) -> 'Wazuh server started.'
+      1 Rule: 23508 (level 3) -> 'CVE-2026-53358 affects linux-image-cloud-amd64 (Missing information, CVE awaiting analysis)'
+      1 Rule: 23508 (level 3) -> 'CVE-2026-53357 affects linux-image-cloud-amd64 (Missing information, CVE awaiting analysis)'
+      1 Rule: 23508 (level 3) -> 'CVE-2026-53356 affects linux-image-cloud-amd64 (Missing information, CVE awaiting analysis)'
+      1 Rule: 23508 (level 3) -> 'CVE-2026-53355 affects linux-image-cloud-amd64 (Missing information, CVE awaiting analysis)'
