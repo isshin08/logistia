@@ -50,14 +50,30 @@ jobs:
         working-directory: ansible
         run: ansible all -m ping
 
-      - name: Deployer configuration commune
+      - name: Common - configuration de base
         working-directory: ansible
         run: ansible-playbook playbooks/common.yml --forks=1
 
-      - name: Deployer application web
+      - name: Base de donnees - PostgreSQL
+        working-directory: ansible
+        run: ansible-playbook playbooks/db.yml --forks=1
+
+      - name: Application web - Nginx + Flask
         working-directory: ansible
         run: ansible-playbook playbooks/web.yml --forks=1
 
-      - name: Deployer base de donnees
+      - name: Supervision - Prometheus + Grafana + Loki
         working-directory: ansible
-        run: ansible-playbook playbooks/db.yml --forks=1
+        run: ansible-playbook playbooks/supervision.yml --forks=1
+
+      - name: SOC - Wazuh
+        working-directory: ansible
+        run: ansible-playbook playbooks/soc.yml --forks=1
+
+      - name: IA - Isolation Forest
+        working-directory: ansible
+        run: ansible-playbook playbooks/ia.yml --forks=1
+
+      - name: Runner - GitHub Actions
+        working-directory: ansible
+        run: ansible-playbook playbooks/runner.yml --forks=1
