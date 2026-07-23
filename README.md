@@ -7,7 +7,7 @@
 > Projet ISRC — Infrastructure intelligente, sécurisée et automatisée pour la chaîne logistique LOGISTIA.
 
 ---
-## 📋 Contexte
+##  Contexte
 
 L'entreprise LOGISTIA exploite plusieurs entrepôts connectés. Ce projet modernise et sécurise son infrastructure en intégrant :
 
@@ -18,9 +18,9 @@ L'entreprise LOGISTIA exploite plusieurs entrepôts connectés. Ce projet modern
 - Une **IA de détection d'anomalies** (Isolation Forest)
 
 ---
-## 🏗️ Architecture
+##  Architecture
 
-\`\`\`
+```
 PC Hôte (32Go RAM)
 └── VirtualBox
     ├── Proxmox VE 9.2 (192.168.1.250)
@@ -30,7 +30,7 @@ PC Hôte (32Go RAM)
     │   ├── soc-server     192.168.30.10  VLAN 30  Wazuh + Grafana + Prometheus
     │   └── runner-server  192.168.50.10  VLAN 50  GitHub Actions Runner
     └── terraform-ansible  192.168.1.150           Poste de contrôle
-\`\`\`
+```
 
 ### Plan réseau
 
@@ -82,16 +82,15 @@ PC Hôte (32Go RAM)
 
 ### 1. Provisionner les VM (Terraform)
 
-\`\`\`bash
-cd terraform
+```bash
 terraform init
 terraform plan
 terraform apply -parallelism=1
-\`\`\`
+```
 
 ### 2. Configurer les services (Ansible)
 
-\`\`\`bash
+```bash
 cd ansible
 ansible-playbook playbooks/common.yml --forks=1
 ansible-playbook playbooks/db.yml --forks=1
@@ -100,7 +99,7 @@ ansible-playbook playbooks/supervision.yml --forks=1
 ansible-playbook playbooks/soc.yml --forks=1
 ansible-playbook playbooks/ia.yml --forks=1
 ansible-playbook playbooks/runner.yml --forks=1
-\`\`\`
+```
 
 ---
 
@@ -126,7 +125,7 @@ ansible-playbook playbooks/runner.yml --forks=1
 
 ---
 
-## 🤖 Intelligence Artificielle
+##  Intelligence Artificielle
 
 **Algorithme** : Isolation Forest (scikit-learn) — détection d'anomalies non supervisée
 
@@ -165,7 +164,7 @@ ansible-playbook playbooks/runner.yml --forks=1
 
 ---
 
-## 📊 Supervision
+##  Supervision
 
 | Service | URL | Rôle |
 |---------|-----|------|
@@ -175,9 +174,9 @@ ansible-playbook playbooks/runner.yml --forks=1
 
 ---
 
-## 📁 Structure du dépôt
+##  Structure du dépôt
 
-\`\`\`
+```
 logistia/
 ├── terraform/
 │   ├── main.tf
@@ -203,7 +202,7 @@ logistia/
     ├── ci.yml
     ├── deploy.yml
     └── security.yml
-\`\`\`
+```
 
 ---
 
